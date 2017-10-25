@@ -1,0 +1,8 @@
+extends layout
+
+block navbar
+    div.container
+    h1 Program Name
+        p Hello World
+    - for (var i = 0; i < response.length; i++)
+        p #{response[i].imei}
