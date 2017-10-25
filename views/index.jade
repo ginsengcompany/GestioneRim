@@ -2,7 +2,96 @@ extends layout
 
 block navbar
     div.container
-    h1 Program Name
-        p Hello World
-    - for (var i = 0; i < response.length; i++)
-        p #{response[i].imei}
+    - var now = new Date()
+    p Elaborazione effettuata al: #{(now.getDate()<10? ("0"+now.getDate()):now.getDate()) + "/" + ((now.getMonth()+1)<10? ("0" + (now.getMonth()+1)):(now.getMonth()+1)) + "/" + now.getFullYear() + " " + (now.getHours()<10 ? ("0"+now.getHours()):now.getHours()) + ":" + (now.getMinutes()<10 ? ("0"+now.getMinutes()):now.getMinutes()) + ":" + (now.getSeconds()<10 ? ("0" + now.getSeconds()):now.getSeconds())}
+    table.table.table-striped.table-bordered
+        thead
+            tr
+                th !
+                th IMEI (a_sim)
+                th NUMERO
+                th INVIATI_A
+                th ID (phones)
+                th INVIATI_B
+                th ULTIMO INVIO
+                th INVIA
+                th ATTIVO
+                th ESISTE
+                th MESE
+                th LIMITE MENSILE
+                th SCADENZA
+                th NOW-1
+                th NOW-2
+                th NOW-3
+                th NOV-4
+                th NOW-5
+                th TOTALE
+        tbody
+            each res in response
+                tr
+                    td #{res.alert}
+                    td #{res.imei}
+                    td #{res.number}
+                    td #{res.sent_a}
+                    td #{res.phone_id}
+                    td #{res.sent_b}
+                    -  if (res.update_db)
+                        td #{(res.update_db.getDate()<10? ("0"+res.update_db.getDate()):res.update_db.getDate()) + "/" + ((res.update_db.getMonth()+1)<10? ("0" + (res.update_db.getMonth()+1)):(res.update_db.getMonth()+1)) + "/" + res.update_db.getFullYear() + " " + (res.update_db.getHours()<10 ? ("0"+res.update_db.getHours()):res.update_db.getHours()) + ":" + (res.update_db.getMinutes()<10 ? ("0"+res.update_db.getMinutes()):res.update_db.getMinutes()) + ":" + (res.update_db.getSeconds()<10 ? ("0" + res.update_db.getSeconds()):res.update_db.getSeconds())}
+                    -   else
+                            td #{null}
+                    td #{res.phone_send}
+                    td #{res.active}
+                    td #{res.exist}
+                    td #{res.month_count}
+                    td #{res.month_limit}
+                    td #{(res.expire_date.getDate()<10? ("0"+res.expire_date.getDate()):res.expire_date.getDate()) + "/" + ((res.expire_date.getMonth()+1)<10? ("0" + (res.expire_date.getMonth()+1)):(res.expire_date.getMonth()+1)) + "/" + res.expire_date.getFullYear()}
+                    td #{res.one_day}
+                    td #{res.two_day}
+                    td #{res.three_day}
+                    td #{res.four_day}
+                    td #{res.five_day}
+                    td #{res.one_day + res.two_day + res.three_day + res.four_day + res.five_day}
+    - var totSentA = 0
+    - var totSentB = 0
+    - var totMese = 0
+    - var totOneDay = 0
+    - var totTwoDay = 0
+    - var totThreeDay = 0
+    - var totFourDay = 0
+    - var totFiveDay = 0
+    - var totDays = 0
+    table.table.table-striped.table-bordered
+        thead
+            tr
+                th TOTALE
+                th INVIATI_A
+                th INVIATI_B
+                th MESE
+                th NOW-1
+                th NOW-2
+                th NOW-3
+                th NOW-4
+                th NOW-5
+                th TOT NOW
+        tbody
+                tr
+                    td #{null}
+                    each sent in response
+                        - totSentA = totSentA + sent.sent_a
+                        - totSentB = totSentB + sent.sent_b
+                        - totMese = totMese + sent.month_count
+                        - totOneDay = totOneDay + sent.one_day
+                        - totTwoDay = totTwoDay + sent.two_day
+                        - totThreeDay = totThreeDay + sent.three_day
+                        - totFourDay = totFourDay + sent.four_day
+                        - totFiveDay = totFiveDay + sent.five_day
+                        - totDays = totDays + sent.one_day + sent.two_day + sent.three_day + sent.four_day + sent.five_day
+                    td #{totSentA}
+                    td << (#{((totSentB / totSentA) * 100).toFixed(2)}%) #{totSentB}
+                    td #{totMese}
+                    td #{totOneDay}
+                    td #{totTwoDay}
+                    td #{totThreeDay}
+                    td #{totFourDay}
+                    td #{totFiveDay}
+                    td #{totDays}

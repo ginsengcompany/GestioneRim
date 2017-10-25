@@ -7,7 +7,7 @@ function getMySQLConnection() {
         host     : 'localhost',
         user     : 'root',
         password : 'mederos',
-        database : 'kalkun'
+        database : 'kalkun',
     });
 }
 module.exports.getMySQLConnection = getMySQLConnection;
