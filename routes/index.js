@@ -63,16 +63,9 @@ router.get('/', function(req, res) {
                     };
                     listaDati.push(dati);
                 }
-                var counter = rows[1][0].COUNTER;
-                if (counter > 0)
-                res.render('index',{response: listaDati, responseLog: "Presenti errori di connessione :" + counter });
-                else
-                    res.render('index',{response: listaDati});
+                res.render('index',{response: listaDati});
             }
         });
     });
-    shell.cd('C:/Users/Alessio/Desktop/Rim');
-    shell.echo('prova');
-    shell.exec('type');
 });
 module.exports = router;
