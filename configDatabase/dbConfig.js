@@ -8,6 +8,7 @@ function getMySQLConnection() {
         user     : 'root',
         password : 'mederos',
         database : 'kalkun',
+        multipleStatements: true
     });
 }
 module.exports.getMySQLConnection = getMySQLConnection;

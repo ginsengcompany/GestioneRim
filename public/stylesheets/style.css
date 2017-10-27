@@ -1,1 +1,12 @@
-body { padding-top: 60px; margin-left: 1em; margin-right: 1em;}
+body { padding-top: 60px;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.collapse.navbar-collapse{
+    margin-bottom: 0;
+    border-radius: 0;
+}
+#customJumbo{
+    margin-top: auto
+}
+
