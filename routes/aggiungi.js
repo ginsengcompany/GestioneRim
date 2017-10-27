@@ -7,6 +7,6 @@ router.get('/', function (req, res) {
 
 router.get('/', function (req, res) {
 
-})
+});
 
 module.exports = router;
