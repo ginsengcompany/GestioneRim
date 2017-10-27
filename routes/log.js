@@ -14,9 +14,10 @@ router.get("/",function (req, res) {
             if (counter > 0)
                 res.send("Presenti errori di connessione :" + counter);
             else{
-                shell.cd("C:/Users/aldom/Desktop");
-                var str = shell.exec("type log.txt");
-                res.send(str);
+                shell.cd('C:/Users/Alessio/Desktop/');
+                var str = shell.exec('type script.log');
+                var logFormat = str.replace(/[<->]*/g,"");
+                res.send(logFormat);
             }
         }
     });
