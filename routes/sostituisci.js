@@ -13,7 +13,20 @@ router.get('/', function(req, res, next) {
     });
 });
 router.post('/', function (req, res){
-    
+    var newImei = req.body.newImeiBody;
+    var oldImei = req.body.oldImeiBody;
+    console.log(newImei);
+    console.log(oldImei);
+    var connection = mysql.getMySQLConnection();
+    var sql = "UPDATE a_sim SET IMEI = '" + newImei + "' WHERE IMEI = '" + oldImei + "'";
+    connection.query(sql, function (err, rows, fields) {
+        if (err){
+          res.json({'status': 500, 'message': "Errore nell'inserimento"});
+        }
+        else{
+          res.json({'status': 200, 'message': "Inserimento avvenuto con successo"});
+        }
+    })
 });
 
 module.exports = router;

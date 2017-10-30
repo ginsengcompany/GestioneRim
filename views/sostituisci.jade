@@ -9,16 +9,17 @@ block head
     script(src="/javascripts/sostituisciController.js")
 
 block navbar
+    div.alert.alert-success#alertSostituzione
     div.jumbotron#customJumbo
-        h2.customH2 Sostituzione Imei Chiavetta
+        h2.customH2 Sostituzione Chiavetta
         form
             div.form-group
-                label(for = 'selectImei') Imei da Sostituire
+                label(for = 'selectImei') Imei da sostituire
                 select#selectImei.form-control
                     each res in oldImei
                         option #{res.IMEI}
             div.form-group
-                label(for='inputNewImei') Inserisci nuovo imei
+                label(for='inputNewImei') Inserisci nuovo Imei
                 input#inputNewImei.form-control(type='text', placeholder='Es. 123456789012345')
             div.form-group
                 button#btnInvioImei.btn.btn-primary(type='button', onclick='sostituisciImei();') Invio

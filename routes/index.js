@@ -4,7 +4,7 @@ var tunnel = require('tunnel-ssh');
 var mysql = require('../configDatabase/dbConfig');
 var shell = require('shelljs');
 
-var config = {
+/*var config = {
     host: '10.10.13.210',
     port: 22,
     username: 'chrx',
@@ -15,7 +15,7 @@ var config = {
 
 tunnel(config, function(err, result){
     console.log('connected')
-});
+});*/
 
 /* GET home page. */
 router.get('/', function(req, res) {
