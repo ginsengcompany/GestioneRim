@@ -9,4 +9,7 @@ body { padding-top: 60px;
 #customJumbo{
     margin-top: auto;
 }
-
+.customH2{
+    text-align: center;
+    margin-top: 0;
+}

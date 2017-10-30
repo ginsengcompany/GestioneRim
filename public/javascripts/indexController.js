@@ -4,7 +4,8 @@ $(document).ready(function () {
 
 function getLog() {
         $.get("http://localhost:3000/log",function(result) {
-            document.getElementById("responseLog").innerHTML = result;
-            setTimeout(getLog,10000);
+            if(window.location.pathname === '/')
+                document.getElementById("responseLog").innerHTML = result;
+            setTimeout(getLog,60000);
         });
 }
