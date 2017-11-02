@@ -2,9 +2,8 @@ var express = require('express');
 var router = express.Router();
 var tunnel = require('tunnel-ssh');
 var mysql = require('../configDatabase/dbConfig');
-var shell = require('shelljs');
-
-var config = {
+//Da rimuovere al momento del deploy
+var config = { //Configurazione del tunnel ssh
     host: '10.10.13.210',
     port: 22,
     username: 'chrx',
@@ -12,18 +11,19 @@ var config = {
     dstPort: 3306,
     keepAlive:true
 };
-
-tunnel(config, function(err, result){
+//Da rimuovere al momento del deploy
+tunnel(config, function(err, result){ //Connessione al tunnel ssh
     console.log('connected')
 });
 
 /* GET home page. */
 router.get('/', function(req, res) {
     var listaDati = [];
-    var connection = mysql.getMySQLConnection();
-    connection.connect(function (err) {
-        if(err)
+    var connection = mysql.getMySQLConnection(); //Crea la connessione al database
+    connection.connect(function (err) { //effettua la connessione
+        if(err) //Errore della connessione al database
             throw err;
+        //Query per recuperare le info della tabella in index.page
         connection.query('SELECT a_sim.NUMBER, a_sim.SENT AS SentA, a_sim.MONTH_COUNT, a_sim.IMEI, a_sim.EXPIRE_DATE, a_sim.LAST_SENT, phones.ID, phones.Sent AS SentB, IF(NUMBER!=ID,"!","") AS ALERT,'+
             'a_sim.ACTIVE, a_sim.EXIST, a_sim.MONTH_LIMIT, phones.Send, phones.UpdatedInDB,'+
             '(SELECT QTY FROM a_dailycounter WHERE a_sim.NUMBER = a_dailycounter.Number AND DATA = DATE_SUB(CURDATE(),INTERVAL 1 DAY)) AS ONE_DAY,'+
@@ -35,10 +35,10 @@ router.get('/', function(req, res) {
         'LEFT JOIN phones ON a_sim.IMEI = phones.IMEI '+
         'order by IMEI; SELECT COUNT(DISTINCT ID) AS COUNTER FROM kalkun.sentitems WHERE Status' +
             '= \'SendingError\' AND SequencePosition = 1', function (err, rows, fields) {
-            if (err) {
+            if (err) { //Errore della query
                 res.status(500).json({"status_code": 500, "status_message": "internal server error"});
-            } else {
-                for (var i = 0; i < rows[0].length; i++) {
+            } else { //Query eseguita correttamente
+                for (var i = 0; i < rows[0].length; i++) { //Creiamo un array di object contenente le info della tabella
                     var dati = {
                         'number': rows[0][i].NUMBER,
                         'imei': rows[0][i].IMEI,
@@ -61,9 +61,9 @@ router.get('/', function(req, res) {
                         'four_day':rows[0][i].FOUR_DAY,
                         'five_day':rows[0][i].FIVE_DAY
                     };
-                    listaDati.push(dati);
+                    listaDati.push(dati); //Inseriamo
                 }
-                res.render('index',{response: listaDati});
+                res.render('index',{response: listaDati}); //Inviamo l'array di info come risposta alla richiesta
             }
         });
     });
