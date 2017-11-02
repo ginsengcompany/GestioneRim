@@ -13,6 +13,7 @@ var sostituisciImei = function () {
     else {
         document.getElementById('alertSostituzione').className = "alert alert-danger";
         document.getElementById('alertSostituzione').innerHTML = "Controllare i campi inseriti";
+        document.getElementById('alertSostituzione').style.display = 'block';
     }
 };
 
