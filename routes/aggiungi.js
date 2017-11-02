@@ -31,11 +31,12 @@ router.post('/', function (req, res) {
                     count++;
             }
             count += 1;
+            shell.cd("/home/aldo/Scrivania/RIM/GestioneRim");
             if (shell.exec("echo 0000 | sudo -S touch /etc/gammu-smsdrc-" + count).code !== 0)
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
             if (shell.exec("echo 0000 | sudo -S chmod 777 /etc/gammu-smsdrc-" + count).code !== 0)
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
-            if (shell.exec("cat /home/aldo/Scrivania/template-gammu-smsdrc >> /etc/gammu-smsdrc-" + count).code !== 0)
+            if (shell.exec("cat templates/template-gammu-smsdrc >> /etc/gammu-smsdrc-" + count).code !== 0)
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
             if (count > 1)
                 shell.sed('-i',/\/dev\/gsmmodem/,'/dev/gsmmodem' + count,'/etc/gammu-smsdrc-' + count);
@@ -50,7 +51,7 @@ router.post('/', function (req, res) {
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
             if (shell.exec("echo 0000 | sudo -S chmod 777 /lib/systemd/system/gammu" + count + ".service").code !== 0)
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
-            if (shell.exec("cat /home/aldo/Scrivania/template-gammu-service >> /lib/systemd/system/gammu" + count + ".service").code !== 0)
+            if (shell.exec("cat templates/template-gammu-service >> /lib/systemd/system/gammu" + count + ".service").code !== 0)
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
             shell.sed('-i',/Gammu/, 'Gammu ' + count,'/lib/systemd/system/gammu' + count + '.service');
             shell.sed('-i',/smsd-/, 'smsd-' + count,'/lib/systemd/system/gammu' + count + '.service');

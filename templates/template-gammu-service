@@ -1,0 +1,20 @@
+[Unit]
+Description=SMS daemon for Gammu
+Documentation=man:gammu-smsd(1)
+After=syslog.target network.target mysql.service
+
+[Service]
+EnvironmentFile=/etc/gammu-smsdrc-
+# Run daemon as root user
+ExecStart=/usr/bin/gammu-smsd --pid=/var/run/gammu-smsd-.pid --daemon --config=/etc/gammu-smsdrc-
+# Run daemon as non-root user (set user/group in /etc/sysconfig/gammu-smsd)
+#ExecStart=/usr/bin/gammu-smsd --user=${GAMMU_USER} --group=${GAMMU_GROUP} --pid=/var/run/gammu-smsd-.pid --daemon
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStopPost=/bin/rm -f /var/run/gammu-smsd-.pid
+Type=idle
+PIDFile=/var/run/gammu-smsd-.pid
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

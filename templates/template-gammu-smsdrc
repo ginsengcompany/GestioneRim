@@ -1,0 +1,38 @@
+
+# Configuration file for Gammu SMS Daemon
+
+# Gammu library configuration, see gammurc(5)
+[gammu]
+device = /dev/gsmmodem
+name = GSM
+connection = at
+model = usb
+# Debugging
+logformat = errorsdate
+logfile = /tmp/gammu.log
+
+# SMSD configuration, see gammu-smsdrc(5)
+[smsd]
+debuglevel = 0
+logfile = /tmp/smsd.log
+service = SQL
+driver = native_mysql
+host = localhost
+database = kalkun
+user = root
+password = mederos
+# Increase for debugging information
+HangupCalls = 1
+runonreceive = /var/www/html/scripts/daemon.sh
+CheckSecurity = 0
+ReceiveFrequency = 300
+StatusFrequency = 150
+CommTimeout = 15
+SendTimeout = 20
+MaxRetries = 5
+LoopSleep = 10
+CheckSecurity = 0
+ResetFrequency=10800
+phoneid = 
+SMSC=+393205858500
+
