@@ -26,6 +26,7 @@ router.post('/', function (req, res) { //Rotta per il servizio di aggiunta della
                     count++;
             }
             count += 1;
+            // TODO Cambiare il path per tornare al progetto
             //Passiamo alla directory del progetto in modo da poter utilizzare i template dei file di configurazione
             shell.cd("/home/aldo/Scrivania/RIM/GestioneRim");
             if (shell.exec("echo 0000 | sudo -S touch /etc/gammu-smsdrc-" + count).code !== 0) //creiamo il file gammu-smsdrc-*
@@ -38,10 +39,12 @@ router.post('/', function (req, res) { //Rotta per il servizio di aggiunta della
                 shell.sed('-i',/\/dev\/gsmmodem/,'/dev/gsmmodem' + count,'/etc/gammu-smsdrc-' + count);
             shell.sed('-i', /GSM/, 'GSM' + count,'/etc/gammu-smsdrc-' + count); //Modifichiamo il campo GSM del nuovo file
             shell.sed('-i', /phoneid = /, 'phoneid = ' + req.body['phoneid'], '/etc/gammu-smsdrc-' + count); //Modifichiamo il campo phoneid del nuovo file
+            // TODO Cambiare il path del file kalkun_settings.php
             var pattern = shell.grep(/\$config\['multiple_modem'\]*/, '/home/aldo/Scrivania/kalkun_settings.php'); //Recuperiamo l'array del php contenente i numeri delle chiavette
             //Aggiungiamo il numero della nuova chiavetta all'array
             var newPattern = pattern.replace(');\n', '');
             newPattern = newPattern.concat(",'"+req.body['phoneid']+"');");
+            // TODO Cambiare il path del file kalkun_settings.php
             shell.sed('-i',/^\$config\['multiple_modem'\] = array.*/,newPattern,'/home/aldo/Scrivania/kalkun_settings.php');
             if (shell.exec("echo 0000 | sudo -S touch /lib/systemd/system/gammu" + count + ".service").code !== 0) //Creiamo il file gammu*.service
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var tunnel = require('tunnel-ssh');
 var mysql = require('../configDatabase/dbConfig');
-//Da rimuovere al momento del deploy
+//TODO Da rimuovere al momento del deploy
 var config = { //Configurazione del tunnel ssh
     host: '10.10.13.210',
     port: 22,
@@ -11,7 +11,7 @@ var config = { //Configurazione del tunnel ssh
     dstPort: 3306,
     keepAlive:true
 };
-//Da rimuovere al momento del deploy
+// TODO Da rimuovere al momento del deploy
 tunnel(config, function(err, result){ //Connessione al tunnel ssh
     console.log('connected')
 });

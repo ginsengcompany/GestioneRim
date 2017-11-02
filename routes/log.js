@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var tunnel = require('tunnel-ssh');
 var mysql = require('../configDatabase/dbConfig');
 var shell = require('shelljs');
 //Rotta utilizzata per recuperare info del file di log
@@ -15,6 +14,7 @@ router.get("/",function (req, res) {
             if (counter > 0) //Sono presenti degli errori sulle chiavette
                 res.send("Presenti errori di connessione :" + counter); //Inviamo la risposta al richiedente
             else{ //Non sono presenti errori sulle chiavette
+                // TODO Cambiare il path del file di log
                 shell.cd('C:/Users/aldom/Desktop/'); //Passiamo alla Directory del file di log
                 var str = shell.exec('type script.log'); //Comando di windows per recuperare le info del file di log
                 var logFormat = str.replace(/[<->]*/g,""); //Replace per il format della stringa
