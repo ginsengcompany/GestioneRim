@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var fs = require('fs');
 var shell = require('shelljs');
 var mysql = require('../configDatabase/dbConfig');
 
@@ -27,10 +26,13 @@ router.post('/', function (req, res) { //Rotta per il servizio di aggiunta della
                     count++;
             }
             count += 1;
+            // TODO Cambiare il path per tornare al progetto
             //Passiamo alla directory del progetto in modo da poter utilizzare i template dei file di configurazione
             shell.cd("/home/aldo/Scrivania/RIM/GestioneRim");
+            // TODO Cambiare la password per il coomando sudo
             if (shell.exec("echo 0000 | sudo -S touch /etc/gammu-smsdrc-" + count).code !== 0) //creiamo il file gammu-smsdrc-*
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
+            // TODO Cambiare la password per il coomando sudo
             if (shell.exec("echo 0000 | sudo -S chmod 777 /etc/gammu-smsdrc-" + count).code !== 0) //modifichiamo i permessi del file
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
             if (shell.exec("cat templates/template-gammu-smsdrc >> /etc/gammu-smsdrc-" + count).code !== 0) //copiamo il template gammu-smsdrc nel file appena creato
@@ -39,13 +41,17 @@ router.post('/', function (req, res) { //Rotta per il servizio di aggiunta della
                 shell.sed('-i',/\/dev\/gsmmodem/,'/dev/gsmmodem' + count,'/etc/gammu-smsdrc-' + count);
             shell.sed('-i', /GSM/, 'GSM' + count,'/etc/gammu-smsdrc-' + count); //Modifichiamo il campo GSM del nuovo file
             shell.sed('-i', /phoneid = /, 'phoneid = ' + req.body['phoneid'], '/etc/gammu-smsdrc-' + count); //Modifichiamo il campo phoneid del nuovo file
+            // TODO Cambiare il path del file kalkun_settings.php
             var pattern = shell.grep(/\$config\['multiple_modem'\]*/, '/home/aldo/Scrivania/kalkun_settings.php'); //Recuperiamo l'array del php contenente i numeri delle chiavette
             //Aggiungiamo il numero della nuova chiavetta all'array
             var newPattern = pattern.replace(');\n', '');
             newPattern = newPattern.concat(",'"+req.body['phoneid']+"');");
+            // TODO Cambiare il path del file kalkun_settings.php
             shell.sed('-i',/^\$config\['multiple_modem'\] = array.*/,newPattern,'/home/aldo/Scrivania/kalkun_settings.php');
+            // TODO Cambiare la password per il coomando sudo
             if (shell.exec("echo 0000 | sudo -S touch /lib/systemd/system/gammu" + count + ".service").code !== 0) //Creiamo il file gammu*.service
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
+            // TODO Cambiare la password per il coomando sudo
             if (shell.exec("echo 0000 | sudo -S chmod 777 /lib/systemd/system/gammu" + count + ".service").code !== 0) //Modifichiamo i permessi al nuovo file
                 return res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
             if (shell.exec("cat templates/template-gammu-service >> /lib/systemd/system/gammu" + count + ".service").code !== 0) //Copiamo il template nel nuovo file
@@ -53,6 +59,9 @@ router.post('/', function (req, res) { //Rotta per il servizio di aggiunta della
             shell.sed('-i',/Gammu/, 'Gammu ' + count,'/lib/systemd/system/gammu' + count + '.service'); //modifichiamo il commento Gammu nel nuovo file
             shell.sed('-i',/smsd-/, 'smsd-' + count,'/lib/systemd/system/gammu' + count + '.service'); //Modifichiamo i campi smsd- del nuovo file
             shell.sed('-i',/smsdrc-/,'smsdrc-' + count, '/lib/systemd/system/gammu' + count + '.service'); //Modifichiamo i campi smsdrc- del nuovo file
+            // TODO Cambiare la password per il coomando sudo
+            if (shell.exec("echo 0000 | sudo systemctl enable gammu" + count).code !== 0) //Utilizziamo il comando per abilitare il servizio della chiavetta
+                res.send({"status": 500, "message": "Errore nell'aggiunta del device"});
             res.send({"status": 200, "message": "Il device &egrave; stato aggiunto correttamente"}); //Inviamo la risposta
         }
     });
